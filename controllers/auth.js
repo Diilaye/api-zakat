@@ -21,28 +21,30 @@ require('dotenv').config({
 
 exports.store = async (req , res , next) => {
     
-    
-
+ 
     try {
         
         const auth = authModel() ;
   
-        auth.phone = req.body.phone ;
+    auth.phone = req.body.phone ;
+    auth.role = req.body.role ;
 
-    const token = jwt.sign({
-        id_user: auth._id,
-        roles_user : auth.role , 
-        phone_user : auth.phone
-    }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+const token = jwt.sign({
+    id_user: auth._id,
+    roles_user : auth.role , 
+    phone_user : auth.phone
+}, process.env.JWT_SECRET, { expiresIn: '8784h' });
 
-    auth.token = token; 
-   
-    const authSave = await auth.save();
-    return message.response(res, message.updateObject('Users') ,  201,{
-        role : authSave.role , 
-        phone : authSave.phone , 
-        token ,
-    } );
+auth.token = token; 
+
+const authSave = await auth.save();
+
+return message.response(res, message.updateObject('Users') ,  201,{
+    role : authSave.role , 
+    phone : authSave.phone , 
+    token ,
+} );
+
 
     
     } catch (error) {
@@ -125,11 +127,20 @@ exports.update = async (req, res ,next ) => {
             auth.phone = req.body.phone ;
         }
         if (req.body.password !=undefined) {
-            if (bcrytjs.compareSync(req.body.password, auth.password)) {
-                const passwordCrypt = bcrytjs.hashSync(req.body.newPassword, salt);
-                auth.passwords = auth.password.push(passwordCrypt);
+            if(auth.password == undefined) {
+                const passwordCrypt = bcrytjs.hashSync(req.body.password, salt);
+                auth.passwords = auth.passwords.push(passwordCrypt);
                 auth.password = passwordCrypt ;
+            }else  {
+                if (bcrytjs.compareSync(req.body.password, auth.password)) {
+                    const passwordCrypt = bcrytjs.hashSync(req.body.newPassword, salt);
+                    auth.passwords = auth.passwords.push(passwordCrypt);
+                    auth.password = passwordCrypt ;
+                }else {
+                    return  message.response(res , message.error() ,404 , "les mot  de passe ne concorde pas");
+                }
             }
+           
     
         }
     
@@ -250,11 +261,11 @@ exports.update = async (req, res ,next ) => {
         }, process.env.JWT_SECRET, { expiresIn: '8784h' });
     
         return message.response(res, message.updateObject('Users')  , 200,{token , phone : auth.phone , role : auth.role , user:userUpdate  });
-
+    
 
     } catch (error) {
        
-       return  message.reponse(res , message.error() ,404 , err);
+       return  message.response(res , message.error() ,404 , error);
     }
 }   
 

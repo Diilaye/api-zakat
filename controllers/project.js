@@ -10,27 +10,13 @@ const message  =  require('../utils/message');
 const populateObject = [{
     path :'cover'
 },{
-    path :'moddelEconomique'
-},{
-    path :'moddelJuridique'
-},{
-    path:'contact'
-},{
-    path:'tansactions'
-},{
-    patth:'views'
-},{
-    path:'like'
-},{
-    path:'comments'
-},{
     path:'user'
 }];
 
 
 exports.store = async (req, res, next) => {
 
-
+   
 
     try {
 
@@ -43,33 +29,33 @@ exports.store = async (req, res, next) => {
             cover,
             type,    
         } = req.body;
-
+    
         const project = projectModdel();
-
+    
         const id = orderid.generate();
-
-
+    
+    
         project.reference  =  'PJ-'+orderid.getTime(id);
-
+    
         project.amount = amount ;
-
+    
         project.description = description ;
-
+    
         project.cover = cover ;
-
+    
         project.user = user.id ;
-
+    
         project.type = type ;
-
+    
         const projectSave = await project.save();
-
+    
         const projectFind  = await projectModdel.findById(projectSave._id).populate(populateObject).exec();
-
+    
         
-       return message.reponse(res,message.createObject('Project'),201,projectFind);
+       return message.response(res,message.createObject('Project'),201,projectFind);
 
     } catch (error) {
-       return message.reponse(res, message.error(),404,error);
+       return message.response(res, message.error(),404,error);
     }
 
 }
@@ -79,13 +65,13 @@ exports.all = async (req, res, next) => {
 
     try {
         
-        const projectFind = await projectModdel.find({}).populate(populateObject).exec();
+        const projectFind = await projectModdel.find(req.query).populate(populateObject).exec();
 
-       return message.reponse(res,message.findObject('Project'),200,projectFind);
+       return message.response(res,message.findObject('Project'),200,projectFind);
 
         
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
    
 
@@ -101,11 +87,11 @@ exports.allByType = async (req, res, next) => {
             type
         }).populate(populateObject).exec();
 
-       return message.reponse(res,message.findObject('Project'),200,projectFind);
+       return message.response(res,message.findObject('Project'),200,projectFind);
 
         
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 
    
@@ -120,11 +106,11 @@ exports.projectByUser = async (req, res, next) => {
             user : req.user.id_user
         }).populate(populateObject).exec();
 
-       return message.reponse(res,message.findObject('Project'),200,projectFind);
+       return message.response(res,message.findObject('Project'),200,projectFind);
 
         
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 
 }
@@ -142,11 +128,11 @@ exports.projectByStatus = async (req, res, next) => {
             status : status
         }).populate(populateObject).exec();
 
-       return message.reponse(res,message.findObject('Project'),200,projectFind);
+       return message.response(res,message.findObject('Project'),200,projectFind);
 
         
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 
    
@@ -159,11 +145,11 @@ exports.one = async (req, res, next) => {
         
         const projectFind = await projectModdel.findById(id).populate(populateObject).exec();
 
-       return message.reponse(res,message.findObject('Project'),200,projectFind);
+       return message.response(res,message.findObject('Project'),200,projectFind);
 
         
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }
 
@@ -250,15 +236,15 @@ exports.update = async (req, res, next) => {
             const projectFind  = await projectModdel.findById(projectSave._id).populate(populateObject).exec();
 
             
-            return message.reponse(res,message.updateObject('Project'),200,projectFind);
+            return message.response(res,message.updateObject('Project'),200,projectFind);
                 
             }else {
-                return message.reponse(res, message.error(),404,"Vous n'avez pas acces à ce project");
+                return message.response(res, message.error(),404,"Vous n'avez pas acces à ce project");
             }
 
 
     } catch (error) {
-       return message.reponse(res, message.error(),404,error);
+       return message.response(res, message.error(),404,error);
     }
 
    
@@ -273,10 +259,10 @@ exports.delete = async (req, res, next) => {
 
         const rows =  await projectFind.delete();
 
-       return message.reponse(res,message.deleteObject('Project'),200,rows);
+       return message.response(res,message.deleteObject('Project'),200,rows);
 
         
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }

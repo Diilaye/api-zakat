@@ -1,5 +1,5 @@
 
-exports.reponse  = (res, message , status ,  data)  => res.status(status).json({
+exports.response  = (res, message , status ,  data)  => res.status(status).json({
     message:message,
     data: data,
     statusCode: status

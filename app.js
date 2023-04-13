@@ -44,15 +44,15 @@ app.use(bodyParser.urlencoded({
 app.use('/zakat-file', express.static('uploads'));
 
 
-app.use('v1/api/users' , authRoute);
+app.use('/v1/api/users' , authRoute);
 
-app.use('v1/api/files' , auth,fileRoute);
+app.use('/v1/api/files' , auth,fileRoute);
 
-app.use('v1/api/projects' , auth,projectRoute);
+app.use('/:v1/api/projects' , auth,projectRoute);
 
-app.use('v1/api/contacts' , auth ,  contactRoute);
+app.use('/v1/api/contact' , auth ,  contactRoute);
 
-app.use('v1/api/transactions' , auth ,  transactionRoute);
+app.use('/v1/api/transactions' , auth ,  transactionRoute);
 
 db().then(_ => {
     const port = process.env.PORT

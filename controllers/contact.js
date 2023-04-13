@@ -1,5 +1,7 @@
 const contactModel  = require('../models/contact');
 
+const projectModdel = require('../models/project');
+
 const message  =  require('../utils/message');
 
 
@@ -14,7 +16,8 @@ exports.store  = async (req,res,next) => {
             nom,
             prenom,
             city ,
-            profile
+            profile,
+            project
         } = req.body;
 
         const contact  = contactModel();
@@ -37,11 +40,15 @@ exports.store  = async (req,res,next) => {
 
         const contactSave = await contact.save();
 
-        return message.reponse(res,message.createObject('Contact'),201,contactSave);
+        const projectFind = await  projectModdel.findById(project).exec();
+
+        projectFind.contact.push(contactSave);
+
+        return message.response(res,message.createObject('Contact'),201,contactSave);
 
     } catch (error) {
 
-       return message.reponse(res , message.error() ,404 , error);
+       return message.response(res , message.error() ,404 , error);
     
     }
 
@@ -53,10 +60,10 @@ exports.all = async  (req, res ,next) => {
         
         const contactFind = await contactModel.find(req.query).exec();
 
-       return message.reponse(res,message.findObject('Contact'),200,contactFind);
+       return message.response(res,message.findObject('Contact'),200,contactFind);
 
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 
 }
@@ -66,10 +73,10 @@ exports.one  = async (req,res,next)=>{
         let {id} =req.params;
         const contactFind = await contactModel.findById(id).exec();
 
-       return message.reponse(res,message.findObject('Contact'),200,contactFind);
+       return message.response(res,message.findObject('Contact'),200,contactFind);
 
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }
 
@@ -125,11 +132,11 @@ exports.update = async  (req,res,next)=> {
 
         const contactSave = await contact.save();
 
-        return message.reponse(res,message.updateObject('Contact'),200,contactSave);
+        return message.response(res,message.updateObject('Contact'),200,contactSave);
 
     } catch (error) {
 
-       return message.reponse(res , message.error() ,404 , error);
+       return message.response(res , message.error() ,404 , error);
     
     }
 }
@@ -140,10 +147,10 @@ exports.delete = async (req,res ,next) =>  {
         const contactFind = await contactModel.findById(id).exec();
         const rows  = contactFind.delete();
 
-       return message.reponse(res,message.deleteObject('Contact'),200,rows);
+       return message.response(res,message.deleteObject('Contact'),200,rows);
 
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }
 

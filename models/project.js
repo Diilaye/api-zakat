@@ -30,43 +30,58 @@ const projectModel = new Schema({
 
     moddelEconomique:[{
         type: Schema.Types.ObjectId,
-        ref: "media"
+        ref: "media",
+        default : []
     }],
 
     moddelJuridique:[{
         type: Schema.Types.ObjectId,
-        ref: "media"
+        ref: "media",
+        default : []
+
     }],
 
     contact:[{
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: "contact",
+        default : []
+
     }],
 
 
     tansactions : [{
         type: Schema.Types.ObjectId,
-        ref: "transactions"
+        ref: "transactions",
+        default : []
+
     }],
 
     views : [{
         type: Schema.Types.ObjectId,
-        ref: "users"
+        ref: "users",
+        default : []
+
     }],
 
     like : [{
         type: Schema.Types.ObjectId,
-        ref: "users"
+        ref: "users",
+        default : []
+
     }],
 
     comments : [{
         type: Schema.Types.ObjectId,
-        ref: "comments"
+        ref: "comments",
+        default : []
+
     }],
 
     user : {
         type: Schema.Types.ObjectId,
-        ref: "users"
+        ref: "users",
+        default : []
+
     },
 
     type: {

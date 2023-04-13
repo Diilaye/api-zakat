@@ -11,40 +11,47 @@ const populateObject = [{
 }];
 
 exports.store = async  (req,res,next) => {
+    
 
     try {
         
-        const transaction =  transactionModel();
+          
+    const transaction =  transactionModel();
 
-        let {
-            amount,
-            project,
-            type,
-        } = req.body;
+    let {
+        amount,
+        project,
+        type,
+    } = req.body;
 
-        const ref = orderid.generate();
+    const ref = orderid.generate();
 
 
-        transaction.reference =  'TR-'+orderid.getTime(ref);
+    transaction.reference =  'TR-'+orderid.getTime(ref);
 
-        transaction.amount  = amount;
+    transaction.amount  = amount;
 
+    if(req.body.type !="ZAKAT"){
         transaction.project  = project;
+    }
 
-        transaction.user  = req.user.id_user;
+    console.log(req.user.id_user);
 
-        transaction.type  = type;
+    transaction.user  = req.user.id_user;
 
-        const  transactionSave = await transaction.save();
+    transaction.type  = type;
 
-        const transactionFind  = await transactionModel.findById(transactionSave._id).populate(populateObject).exec();
+    const  transactionSave = await transaction.save();
 
-        const object = Object.assign(transactionFind , req.url);
+    const transactionFind  = await transactionModel.findById(transactionSave._id).populate(populateObject).exec();
 
-       return message.reponse(res,message.createObject('Transaction'),201,object);
+   return message.response(res,message.createObject('Transaction'),201,{
+    url:req.url,
+    transaction : transactionFind
+   });
 
     } catch (error) {
-       return message.reponse(res, message.error(),404,error);
+       return message.response(res, message.error(),404,error);
         
     }
 

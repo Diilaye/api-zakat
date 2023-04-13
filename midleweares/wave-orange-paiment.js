@@ -49,7 +49,7 @@ module.exports = async (req,res,next) =>  {
       'Authorization': 'Bearer '+req.tokenOM, 
       'Content-Type': 'application/json'
     },
-    data : configOM
+    data : configOM(req.body.amount)
   };
   
   
