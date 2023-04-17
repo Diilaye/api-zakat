@@ -6,6 +6,7 @@ const orderid = require('order-id')('diikaanedevZakat');
 
 const message  =  require('../utils/message');
 
+var ObjectID = require('mongodb').ObjectID
 
 const populateObject = [{
     path :'cover'
@@ -177,9 +178,9 @@ exports.update = async (req, res, next) => {
             status
         } = req.body;
 
-        const project = projectModdel.findById(id).exec();
-
-        if (project.user == req.user.id_user ) {
+        const project = await  projectModdel.findById(id).exec();
+        
+        if (project.user.toString() == ObjectID(req.user.id_user).toString() ) {
 
             if (amount != undefined) {
                 project.amount = amount ;
