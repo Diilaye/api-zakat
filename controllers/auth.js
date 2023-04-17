@@ -69,35 +69,43 @@ exports.auth = async  ( req, res ,_ ) => {
             phone : req.body.phone
 
         }).exec();
-        
-        if (bcrytjs.compareSync(req.body.password, user.password)) {
-            const token = jwt.sign({
-                id_user: user.id,
-                role_user : user.role , 
-                phone_user : user.phone
-            }, process.env.JWT_SECRET, { expiresIn: '8784h' });
-            user.token = token  ;
-            await  user.save();
-            return res.json({
-                message: 'Connection réussssi',
-                status: 'OK',
-                data: {
-                    user : user ,
-                    token : token
-                },
-                statusCode: 200
-            });
+
+        if (user) {
+            if (bcrytjs.compareSync(req.body.password, user.password)) {
+                const token = jwt.sign({
+                    id_user: user.id,
+                    role_user : user.role , 
+                    phone_user : user.phone
+                }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+                user.token = token  ;
+                await  user.save();
+                return res.json({
+                    message: 'Connection réussssi',
+                    status: 'OK',
+                    data: {
+                        user : user ,
+                        token : token
+                    },
+                    statusCode: 200
+                });
+            } else {
+                return res.status(401).json({
+                    message: 'Identifiant  Incorrect',
+                    status: 'NOT OK',
+                    data:  "error identifiant",
+                    statusCode: 401
+                });
+            }
         } else {
-            return res.status(401).json({
-                message: 'Identifiant   Incorrect',
-                status: 'NOT OK',
-                data:  "error identifiant",
-                statusCode: 401
-            });
+            message.response(res , message.error() ,404 , "Identifiant  Incorrect");
         }
+        
+        
     }
+
    } catch (error) {
-    return  message.reponse(res , message.error() ,404 , err);
+
+    return  message.response(res , message.error() ,404 , error.stack);
    }
 
 

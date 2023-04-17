@@ -63,10 +63,10 @@ exports.all = async (req,res,next) => {
         
         const transactionFind = await transactionModel.find(req.query).exec();
 
-       return message.reponse(res,message.findObject('Transaction'),200,transactionFind);
+       return message.response(res,message.findObject('Transaction'),200,transactionFind);
 
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }
 
@@ -75,10 +75,10 @@ exports.one  = async (req,res,next)=>{
         let {id} =req.params;
         const transactionFind = await transactionModel.findById(id).exec();
 
-       return message.reponse(res,message.findObject('Transaction'),200,transactionFind);
+       return message.response(res,message.findObject('Transaction'),200,transactionFind);
 
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }
 
@@ -112,7 +112,7 @@ exports.update = async  (req,res,next)=> {
 
         const transactionSave = await transaction.save();
 
-        return message.reponse(res,message.updateObject('Transaction'),200,transactionSave);
+        return message.response(res,message.updateObject('Transaction'),200,transactionSave);
 
     } catch (error) {
 
@@ -127,9 +127,9 @@ exports.delete = async (req,res ,next) =>  {
         const contactFind = await transactionModel.findById(id).exec();
         const rows  = contactFind.delete();
 
-       return message.reponse(res,message.deleteObject('Transaction'),200,rows);
+       return message.response(res,message.deleteObject('Transaction'),200,rows);
 
     } catch (error) {
-        return message.reponse(res, message.error(),404,error); 
+        return message.response(res, message.error(),404,error); 
     }
 }
