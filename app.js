@@ -48,7 +48,7 @@ app.use('/v1/api/users' , authRoute);
 
 app.use('/v1/api/files' , auth,fileRoute);
 
-app.use('/:v1/api/projects' , auth,projectRoute);
+app.use('/:v1/api/projects' ,projectRoute);
 
 app.use('/v1/api/contact' , auth ,  contactRoute);
 

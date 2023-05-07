@@ -11,13 +11,13 @@ const routes = new express.Router();
 
 // Add routes
 routes.get('/', projectCtrl.all);
-routes.get('/by-type/:type', projectCtrl.allByType);
-routes.get('/by-user/', projectCtrl.projectByUser);
-routes.get('/by-status/:status', projectCtrl.projectByStatus);
-routes.get('/:id', projectCtrl.one);
-routes.post('/',projectCtrl.store);
-routes.put('/:id',projectCtrl.update);
-routes.delete('/:id', projectCtrl.delete);
+routes.get('/by-type/:type', auth,projectCtrl.allByType);
+routes.get('/by-user/', auth,projectCtrl.projectByUser);
+routes.get('/by-status/:status', auth,projectCtrl.projectByStatus);
+routes.get('/:id', auth,projectCtrl.one);
+routes.post('/',auth,projectCtrl.store);
+routes.put('/:id',auth,projectCtrl.update);
+routes.delete('/:id', auth,projectCtrl.delete);
 
 module.exports = routes;
     
