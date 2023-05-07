@@ -13,6 +13,11 @@ const projectModel = new Schema({
         default :""
     },
 
+    name : {
+        type : String,
+        default :""
+    },
+
     pourcentage : {
         type : String,
         default :"10"

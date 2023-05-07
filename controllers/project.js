@@ -27,6 +27,7 @@ exports.store = async (req, res, next) => {
         let {
             amount,
             description,
+            name,
             cover,
             type,    
         } = req.body;
@@ -38,6 +39,7 @@ exports.store = async (req, res, next) => {
     
         project.reference  =  'PJ-'+orderid.getTime(id);
     
+        project.name = name ;
         project.amount = amount ;
     
         project.description = description ;
@@ -165,6 +167,7 @@ exports.update = async (req, res, next) => {
 
         let {
             amount,
+            name,
             description,
             type,    
             cover,
@@ -184,6 +187,10 @@ exports.update = async (req, res, next) => {
 
             if (amount != undefined) {
                 project.amount = amount ;
+            }
+
+            if (name != undefined) {
+                project.name = name ;
             }
 
             if (description != undefined) {
