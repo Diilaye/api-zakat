@@ -10,7 +10,7 @@ const routes = express.Router();
 
 // Add routes
 routes.get('/', authMidleweare ,authCtrl.findAuth);
-routes.post('/validCode' , authCtrl.verifCode);
+routes.post('/code' , authCtrl.verifCode);
 routes.get('/code' , authCtrl.verifNumberValid);
 routes.post('/', authCtrl.store);
 routes.post('/auth', authCtrl.auth);
