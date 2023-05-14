@@ -374,9 +374,25 @@ exports.verifCode = async (req,res) =>  {
     
            const authSave =  await auth.save();
     
+            const findAuth =  await authModel.findById(authSave.id).exec();
+    
+            const token = jwt.sign({
+                id_user: authSave.id,
+                roles_user : authSave.role , 
+                phone_user : authSave.phone
+            }, process.env.JWT_SECRET, { expiresIn: '8784h' });
+    
+    
+    
+            findAuth.token =  token;
+    
+            const Sauth =  await findAuth.save();
+    
+           
+    
             await codes.save();
             
-            return message.response(res , message.findObject('Code') ,200 , authSave);
+            return message.response(res , message.findObject('Code') ,200 , {data : Sauth ,token :token});
             
         }
     
