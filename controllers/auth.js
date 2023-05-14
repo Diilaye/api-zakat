@@ -1,7 +1,7 @@
 
 const authModel = require('../models/auth');
 
-const codePhoneModel = require('../models/phone-code');
+const codePhoneModel = require('../models/code-phone');
 
 const fileModel  =  require('../models/file');
 
@@ -12,6 +12,8 @@ const salt = bcrytjs.genSaltSync(10);
 const jwt = require('jsonwebtoken');
 
 var ObjectID = require('mongodb').ObjectID
+
+const axios = require('axios');
 
 const message  =  require('../utils/message');
 
@@ -283,7 +285,8 @@ exports.delete = (req, res , next ) => authModel.findByIdAndDelete(req.user.id_u
 
 exports.verifNumberValid = async (req, res , next) => {
 
-
+    
+   
     
    try {
     
@@ -298,7 +301,7 @@ exports.verifNumberValid = async (req, res , next) => {
     })
 
     if(phoneV ==null) {
-        const newCode  = codeModel();
+        const newCode  = codePhoneModel();
 
         newCode.code = num;
 
@@ -335,7 +338,7 @@ exports.verifNumberValid = async (req, res , next) => {
             data : data
         };
         
-        axios.request(config)
+        return axios.request(config)
         .then((_) => message.response(res , message.createObject('Code') ,201 , num))
         .catch((error) => message.response(res,message.error() ,400 , error));
     } else {
@@ -344,7 +347,7 @@ exports.verifNumberValid = async (req, res , next) => {
    
 
    } catch (error) {
-    message.response(res,message.error() ,400 , error);
+     return message.response(res,message.error() ,400 , error);
    }
 
     
@@ -355,7 +358,7 @@ exports.verifCode = async (req,res) =>  {
 
     try {
 
-        const codes = await codeModel.findOne({
+        const codes = await codePhoneModel.findOne({
             code : req.body.code,
             phone : req.body.phone,
             is_treat : false
