@@ -336,10 +336,10 @@ exports.verifNumberValid = async (req, res , next) => {
         };
         
         axios.request(config)
-        .then((_) => message.reponse(res , message.createObject('Code') ,201 , num))
-        .catch((error) => message.reponse(res,message.error() ,400 , error));
+        .then((_) => message.response(res , message.createObject('Code') ,201 , num))
+        .catch((error) => message.response(res,message.error() ,400 , error));
     } else {
-        return message.reponse(res , message.findObject('Telephone') ,200 , phoneV);
+        return message.response(res , message.findObject('Telephone') ,200 , phoneV);
     }
    
 
