@@ -278,8 +278,8 @@ exports.update = async (req, res ,next ) => {
 }   
 
 exports.delete = (req, res , next ) => authModel.findByIdAndDelete(req.user.id_user).then(result => {
-   return  message.reponse(res , message.createObject('Code') ,201 , num);
-}).catch( err =>  message.reponse(res , message.error() ,404 , err));
+   return  message.response(res , message.createObject('Code') ,201 , num);
+}).catch( err =>  message.response(res , message.error() ,404 , err));
 
 exports.verifNumberValid = async (req, res , next) => {
 
@@ -344,7 +344,7 @@ exports.verifNumberValid = async (req, res , next) => {
    
 
    } catch (error) {
-    message.reponse(res,message.error() ,400 , error);
+    message.response(res,message.error() ,400 , error);
    }
 
     
@@ -373,16 +373,16 @@ exports.verifCode = async (req,res) =>  {
     
             await codes.save();
             
-            return message.reponse(res , message.findObject('Code') ,200 , authSave);
+            return message.response(res , message.findObject('Code') ,200 , authSave);
             
         }
     
-        return message.reponse(res , message.notFindObject('Code') ,400 , {});
+        return message.response(res , message.notFindObject('Code') ,400 , {});
 
 
     } catch (error) {
 
-        message.reponse(res,message.error() ,400 , error);
+        message.response(res,message.error() ,400 , error);
 
     }
 
