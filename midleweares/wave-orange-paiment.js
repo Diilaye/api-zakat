@@ -1,43 +1,7 @@
 const axios = require('axios');
 
-configOM = (amount ) => JSON.stringify({
-  "amount": {
-    "unit": "XOF",
-    "value": amount
-  },
-  "callbackCancelUrl": "https://my-cancel-url.com",
-  "callbackSuccessUrl": "https://my-success-url.com",
-  "code": 159515,
-  "metadata": {},
-  "name": "Verumed",
-  "validity": 15
-});
 
 
-
-
-
-
-
-
-
-configWave = (amount ) =>  JSON.stringify({
-  "amount": amount,
-  "currency": "XOF",
-  "error_url": "https://example.com/error",
-  "success_url": "https://example.com/success"
-})
-
-let WaveConfig = {
-  method: 'post',
-  maxBodyLength: Infinity,
-  url: 'https://api.wave.com/v1/checkout/sessions',
-  headers: { 
-    'Authorization': 'Bearer wave_sn_prod_U6G70A-tfpBnH8ZQ9WRkJScYe9lrEA_UQWvPqA6Qi-kA-pITtiQ9bWaiBeMzFUK5A59bSNC93h821gBFg-jmvDw4azSNz7pE8g', 
-    'Content-Type': 'application/json'
-  },
-  data : configWave("2000")
-};
 
 module.exports = async (req,res,next) =>  {
 
@@ -49,7 +13,18 @@ module.exports = async (req,res,next) =>  {
       'Authorization': 'Bearer '+req.tokenOM, 
       'Content-Type': 'application/json'
     },
-    data : configOM(req.body.amount)
+    data :JSON.stringify({
+      "amount": {
+        "unit": "XOF",
+        "value": req.body.amount
+      },
+      "callbackCancelUrl": "https://api-zakat.verumsoft.com/v1/api/transactions/errorOrange",
+      "callbackSuccessUrl": "https://api-zakat.verumsoft.com/v1/api/transactions/successOrange",
+      "code": 159515,
+      "metadata": {},
+      "name": "Verumed",
+      "validity": 15
+    })
   };
   
   
@@ -64,6 +39,23 @@ module.exports = async (req,res,next) =>  {
         console.log(error);
       });
     }else  {
+
+      let WaveConfig = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.wave.com/v1/checkout/sessions',
+        headers: { 
+          'Authorization': 'Bearer wave_sn_prod_t0CQb9rv21w50ooAfq8B8BjyyY9Ldx-g-eU6VS8zxYKqlHctymZX_ayTuPYPWnp8CJ4fBxpayxyXo7aa84d9zf7sl3XOBjwDKw', 
+          'Content-Type': 'application/json'
+        },
+        data : JSON.stringify({
+          "amount": req.body.amount,
+          "currency": "XOF",
+          "error_url": "https://api-zakat.verumsoft.com/v1/api/transactions/errorWave",
+          "success_url": "https://api-zakat.verumsoft.com/v1/api/transactions/success-wave"
+        })
+      };
+      
 
       axios.request(WaveConfig)
       .then((response) => {
