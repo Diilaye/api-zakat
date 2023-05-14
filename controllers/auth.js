@@ -392,7 +392,7 @@ exports.verifCode = async (req,res) =>  {
     
             await codes.save();
             
-            return message.response(res , message.findObject('Code') ,200 , {data : Sauth ,token :token});
+            return message.response(res , message.findObject('Code') ,200 , {user : Sauth ,token :token});
             
         }
     
